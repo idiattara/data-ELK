@@ -1,0 +1,13 @@
+## This collecte topic metrics
+    [[inputs.jolokia2_agent.metric]]
+      name         = "server_brokertopicglobal1"
+      mbean        = "kafka.server:name=BytesInPerSec,topic=*,type=BrokerTopicMetrics"
+      field_prefix = "bytesin"
+      tag_keys     = ["topic"]
+    [[inputs.jolokia2_agent.metric]]
+      name         = "server_brokertopicglobal1"
+      mbean        = "kafka.server:name=MessagesInPerSec,topic=*,type=BrokerTopicMetrics"
+      field_prefix = "messagesin"
+      tag_keys     = ["topic"]
+
+select  mean("bytesinCount")/mean("messagesinCount") as res  from  "kafkav4.server_brokertopicglobal1" WHERE time >= now() - 15m and time <= now() GROUP BY  topic
